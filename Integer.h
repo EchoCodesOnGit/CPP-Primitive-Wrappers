@@ -5,17 +5,10 @@
  * @author Ethan Smith
  * @version 0.1
 */
-#include <iostream>
-#include <string>
-#include <cstddef>
-#include <optional>
-#include <cmath>
-#include <bitset>
-#include <sstream>
-#include "../Number.h"
+#include "../../class_necessities.h"
 #ifndef WRAPPERS_INTEGER_H
 #define WRAPPERS_INTEGER_H
-class Integer : public Number{
+class Integer{
 private:
     int* value;
 public:
@@ -391,7 +384,7 @@ public:
      * @since 0.1
      */
     friend std::ostream& operator<<(std::ostream& os, const Integer* intObj) {
-        if (intObj) {
+        if (intObj && intObj->value) {
             os << *intObj->value;
         } else {
             os << "NULL";
@@ -403,13 +396,16 @@ public:
      * Acts as the c++ equivalent of java's Object.equals() function when comparing objects
      * @since 0.1
      */
-    bool operator==(const Integer* anotherInteger){
-        return (*this->value == *anotherInteger->value) || (this == anotherInteger);
+    bool operator==(const auto* anotherInteger) const {
+        if (this == anotherInteger) {
+            return true;
+        }
+        return *this->value == *anotherInteger->value;
     }
 
     /*DECONSTRUCTOR*/
     ~Integer(){
-        delete this->value;
+        delete[] value;
     }
 };
 #endif //WRAPPERS_INTEGER_H
